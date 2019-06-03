@@ -258,6 +258,11 @@ def get_data_hydro_potential():
 
 #wind power data from Wikipedia for each state
 def wind_data_wiki():
+    '''
+        load wind data from https://en.wikipedia.org/wiki/Growth_of_wind_power_in_the_United_States
+        to a dataframe
+        ruturn: (DataFrame)
+    '''
     html = urlopen('https://en.wikipedia.org/wiki/Growth_of_wind_power_in_the_United_States')
     soup = BeautifulSoup(html.read(),'html.parser')
     tables = soup.find_all('table', {'class':'wikitable'})
@@ -292,6 +297,16 @@ def wind_data_wiki():
     return wind
 
 def convert_dataframe_with_str_to_float(wind):
+    '''
+        modify wind power generation data for future use
+        return the dataframe with full states data and float datatype
+        arcs:
+            wind (DataFrame)
+        return: (DataFrame)
+    '''
+    
+    assert isinstance(wind,pd.DataFrame)
+        
     index=list(wind.index)+['Alabama','Arkansas','Florida','Georgia','Kentucky','Louisiana',
                         'South Carolina','Mississippi','Virginia']
     wind_float=pd.DataFrame(index=index)
@@ -303,6 +318,9 @@ def convert_dataframe_with_str_to_float(wind):
     return wind_float
 
 def scrape_wind_data_from_wiki():
+    '''
+        process scraping wind data and save wind data into a csv file
+    '''
     wind=wind_data_wiki()
     wind_float=convert_dataframe_with_str_to_float(wind)
     wind_float.to_csv('Plot_Data/wind_wiki.csv')
