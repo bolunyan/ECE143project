@@ -30,7 +30,7 @@ The project finds widespread real world application in the current scenario of t
 - #### Import the renewable.py
 
 ### renewable.getWikiTables()
-- #### Scrapes the wikipedia for generation data and some auxillary data, along with Solar generation data and saves files in folder 'Plot_Data/WikiTables', with subfolders as the Wiki-Page names. Prints out the pathnames of saved files.
+- #### Scrapes the wikipedia for generation data and some auxillary data, from links in Wikilinks/Wikilinks.txt, along with Solar generation data and saves files in folder 'Plot_Data/WikiTables', with subfolders as the Wiki-Page names. Prints out the pathnames of saved files.
 
 ### renewable.get_data_generation_1999_2019()
 - #### Scrapes Wikipedia for generation data, saves it in 'Plot_Data/energy_consumpton_USA.csv' and returns the dataframe as well.
