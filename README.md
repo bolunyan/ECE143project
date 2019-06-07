@@ -51,6 +51,8 @@ The project finds widespread real world application in the current scenario of t
 - basemap
 - imageio
 
+(A sample of all the instructions below is present in <b>SampleOutput</b>.pdf) 
+
 ### import renewable
 - #### Import the renewable.py
 
