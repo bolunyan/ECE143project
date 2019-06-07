@@ -259,9 +259,7 @@ def get_data_hydro_potential():
 #wind power data from Wikipedia for each state
 def wind_data_wiki():
     '''
-        load wind data from https://en.wikipedia.org/wiki/Growth_of_wind_power_in_the_United_States
-        to a dataframe
-        ruturn: (DataFrame)
+    scrape wind production data from wikipedia and return as pandas.DataFrame
     '''
     html = urlopen('https://en.wikipedia.org/wiki/Growth_of_wind_power_in_the_United_States')
     soup = BeautifulSoup(html.read(),'html.parser')
@@ -298,15 +296,9 @@ def wind_data_wiki():
 
 def convert_dataframe_with_str_to_float(wind):
     '''
-        modify wind power generation data for future use
-        return the dataframe with full states data and float datatype
-        arcs:
-            wind (DataFrame)
-        return: (DataFrame)
+    Convert a dataframe with string values to respective float values
     '''
-    
-    assert isinstance(wind,pd.DataFrame)
-        
+    assert isinstance(wind, pd.DataFrame)
     index=list(wind.index)+['Alabama','Arkansas','Florida','Georgia','Kentucky','Louisiana',
                         'South Carolina','Mississippi','Virginia']
     wind_float=pd.DataFrame(index=index)
@@ -319,7 +311,7 @@ def convert_dataframe_with_str_to_float(wind):
 
 def scrape_wind_data_from_wiki():
     '''
-        process scraping wind data and save wind data into a csv file
+    Scrape wind data from wikipedia and store it in the CSV file "Plot_Data/wind_wiki.csv"
     '''
     wind=wind_data_wiki()
     wind_float=convert_dataframe_with_str_to_float(wind)
@@ -332,7 +324,7 @@ def scrape_wind_data_from_wiki():
 #################Scraping EIA Data#######################
 #########################################################
 
-def getColumnsAndIndices(chromePath, tablenames, link1, link2):
+def getColumnsAndIndices(chromePath=None, tablenames=None, link1=None, link2=None):
     '''
     Returns the columns and indices for the EIA data as a dictionary.
     The keys of the dictionary are tablenames, the values are a list of
@@ -417,7 +409,7 @@ def getTableDataFromEIA(link1=None, link2=None, inpath=None, driver=None, year1=
                 print('Saving data for ' + i + ' to ' + j + ' to path ' + path)
                 f.write(str(collist))
 
-def getTablesFromEIA(link1, link2, link3, tablenames, chromePath, year1, year2):
+def getTablesFromEIA(link1=None, link2=None, link3=None, tablenames=None, chromePath=None, year1=None, year2=None):
     '''
     Fetches EIA Tables By Generating Apt Links.
     Uses getTableDataFromEIA as a helper function.

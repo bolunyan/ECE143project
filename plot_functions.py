@@ -4,7 +4,6 @@ from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 import plotly
 from plotly.graph_objs import *
 import plotly.plotly as py
-plotly.tools.set_credentials_file(username='swaggarw', api_key='lNDGDRwz0l5VtiHflnJZ')
 init_notebook_mode(connected=True)
 import matplotlib.pyplot as plt
 import math
@@ -17,7 +16,7 @@ plt.style.use('seaborn-whitegrid')
 
 def Plot_Renewable_All():
     '''
-    
+    Plot energy pie chart for all sources.
     '''
     
     ## Pie Chart for Renewable Energy Consumption in the United States
@@ -120,7 +119,7 @@ def Plot_Renewable_All():
     
 def Plot_Renewable():
     '''
-    
+    Plot Share of renewable energy as pie chart
     '''
     
     ## Pie Chart for Renewable Energy Consumption in the United States
@@ -223,7 +222,7 @@ def Plot_Renewable():
     fig = Figure(data=data, layout=layout)
     iplot(fig, filename='plots/Renewable_2008_2018', image_height=720, image_width=1080)
     
-def plot_pieChart_renewable(source, year):
+def plot_pieChart_renewable(source=None, year=None):
     '''
         plot the pie chart of the energy source of given year
     '''
@@ -258,9 +257,9 @@ def plot_pieChart_renewable(source, year):
     
 def GetElectricityTrends():
     '''
-    
+    Get Renewable Production vs Area, Population and Budget data. 
     '''
-    
+
     Table1 = pd.read_pickle('Plot_Data/WikiTables/List_of_U.S._states_by_electricity_production_from_renewable_sources/Table0')
     Table1 = Table1.iloc[1::, [2, 3, 5]]
     Table1 = Table1.sort_values(('State', 'State'))
@@ -291,53 +290,67 @@ def GetElectricityTrends():
     Table1['Population'] = Table2.iloc[::, 0]
     Table1['Area'] = Table3.iloc[::, 0]
     Table1['Budget'] = Table4.iloc[::, 0]
-    Table1['logArea'] = [math.log10(i) for i in Table1['Area']]
-    Table1['logPop'] = [math.log2(i) for i in Table1['Population']]
 
     Table1.index = Table1.index.astype(str)
     return Table1
 
 def PlotEnergyArea(Table1=None):
     '''
-    
+    Plot Renewable Production vs Area for US States Graph
     '''
+    
+    assert isinstance(Table1, pd.DataFrame)
     
     my_dpi=200
     plt.style.use('seaborn-whitegrid')
 
-    plotTable = Table1.sort_values('logArea')
+    plotTable = Table1.sort_values('Area')
     plotTable = plotTable.iloc[::, [-2, 1]]
 
     fig, ax = plt.subplots(figsize=(1500/my_dpi, 1000/my_dpi), dpi=my_dpi)
 
-    ax.plot(plotTable['logArea'], plotTable[('Renewable Electricity', 'with Hydro(GW•h)')], linewidth=2, alpha=0.7)
+    ax.plot(plotTable['Area'], plotTable[('Renewable Electricity', 'with Hydro(GW•h)')], color='xkcd:azure', linewidth=2, alpha=0.7)
 
     plt.grid(b=True)
-    ax.annotate('Oregon', (plotTable.loc['Oregon']), ha='center')
-    ax.annotate('California', (plotTable.loc['California']))
-    ax.annotate('Washington', (plotTable.loc['Washington']), ha='right')
-    ax.annotate('New York', (plotTable.loc['New York']), ha='right')
+    ax.annotate('OR', (plotTable.loc['Oregon']), ha='center')
+    ax.annotate('CA', (plotTable.loc['California']))
+    ax.annotate('WA', (plotTable.loc['Washington']), ha='right')
+    ax.annotate('NY', (plotTable.loc['New York']), ha='right')
+    ax.annotate('AK', (plotTable.loc['Alaska']), va='top')
+    ax.annotate('TX', (plotTable.loc['Texas']), ha='left')
+    ax.annotate('MT', (plotTable.loc['Montana']), ha='left', va='top')
+    ax.annotate('NM', (plotTable.loc['New Mexico']), va='top')
+    ax.annotate('UT', (plotTable.loc['Utah']), va='top', ha='center')
 
-    ax.set_title('Renewable Production vs log(Area)', fontdict={'fontsize': 15, 'fontweight': 12}, color='xkcd:black')
-    ax.set_xlabel("log$_{10}$(Area(km$^2$)) " + r'$\rightarrow$', fontdict={'fontsize': 12, 'fontweight': 12})
+    ax.set_title('Renewable Production vs Area', fontdict={'fontsize': 15, 'fontweight': 12}, color='xkcd:black')
+    ax.set_xlabel("Area(km$^2$) " + r'$\rightarrow$', fontdict={'fontsize': 12, 'fontweight': 12})
     ax.tick_params(axis='x', rotation=0, labelsize=10, width=3)
     ax.set_ylabel("Production (GWh) " + r'$\rightarrow$', fontdict={'fontsize': 12, 'fontweight': 12})
-    fig.savefig('plots/AreaVsProd.png', bbox_inches='tight')
+
+    ax.set_xlim(left=3000, right=2500000)
+    ax.set_ylim(-500, 100500)
+
+    plt.xscale('log')
+
     plt.style.use('seaborn-whitegrid')
     ax.spines['bottom'].set_color('0')
     ax.spines['top'].set_color('0')
     ax.spines['right'].set_color('0')
     ax.spines['left'].set_color('0')
+
+    fig.savefig('plots/AreaVsProd.png', bbox_inches='tight')
     
 def PlotEnergyBudget(Table1=None):
     '''
-    
+    Plot Renewable Production vs State Budget for US States Graph
     '''
     
+    assert isinstance(Table1, pd.DataFrame)
+    
     my_dpi=200
-
+    
     plotTable = Table1.sort_values('Budget')
-    plotTable = plotTable.iloc[::, [-3, 1]]
+    plotTable = plotTable.iloc[::, [-1, 1]]
 
     fig, ax = plt.subplots(figsize=(1500/my_dpi, 1000/my_dpi), dpi=my_dpi)
 
@@ -357,26 +370,33 @@ def PlotEnergyBudget(Table1=None):
     ax.set_xlabel("Budget (billions \$) " + r'$\rightarrow$', fontdict={'fontsize': 12, 'fontweight': 12})
     ax.tick_params(axis='x', rotation=0, labelsize=10, width=3)
     ax.set_ylabel("Production (GWh) " + r'$\rightarrow$', fontdict={'fontsize': 12, 'fontweight': 12})
-    fig.savefig('plots/BudgetVsProd.png', bbox_inches='tight')
+
     plt.style.use('seaborn-whitegrid')
+    ax.set_xlim(left=0, right=200)
+    ax.set_ylim(-500, 100500)
 
     ax.spines['bottom'].set_color('0')
     ax.spines['top'].set_color('0')
     ax.spines['right'].set_color('0')
     ax.spines['left'].set_color('0')
+
+    fig.savefig('plots/BudgetVsProd.png', bbox_inches='tight')
     
 def PlotEnergyPop(Table1=None):
     '''
-    
+    Plot Renewable Production vs Population for US States Graph
     '''
+    
+    assert isinstance(Table1, pd.DataFrame)
+    
     my_dpi=200
-
-    plotTable = Table1.sort_values('logPop')
-    plotTable = plotTable.iloc[::, [-1, 1]]
+    
+    plotTable = Table1.sort_values('Population')
+    plotTable = plotTable.iloc[::, [-3, 1]]
 
     fig, ax = plt.subplots(figsize=(1500/my_dpi, 1000/my_dpi), dpi=my_dpi)
 
-    ax.plot(plotTable['logPop'], plotTable[('Renewable Electricity', 'with Hydro(GW•h)')],linewidth=2, alpha=0.7)
+    ax.plot(plotTable['Population'], plotTable[('Renewable Electricity', 'with Hydro(GW•h)')],linewidth=2, alpha=0.7, color='xkcd:azure')
 
     plt.grid(b=True)
     ax.annotate('OR', (plotTable.loc['Oregon']), ha='center')
@@ -389,17 +409,22 @@ def PlotEnergyPop(Table1=None):
     ax.annotate('NJ', (plotTable.loc['New Jersey']), ha='right', va='top')
     ax.annotate('FL', (plotTable.loc['Florida']), ha='left', va='top')
 
-    ax.set_title('Renewable Production vs log(Population)', fontdict={'fontsize': 15, 'fontweight': 12}, color='xkcd:black')
-    ax.set_xlabel("log$_{2}$(Population) " + r'$\rightarrow$', fontdict={'fontsize': 12, 'fontweight': 12})
+    ax.set_title('Renewable Production vs Population', fontdict={'fontsize': 15, 'fontweight': 12}, color='xkcd:black')
+    ax.set_xlabel("Population " + r'$\rightarrow$', fontdict={'fontsize': 12, 'fontweight': 12})
     ax.tick_params(axis='x', rotation=0, labelsize=10, width=3)
     ax.set_ylabel("Production (GWh) " + r'$\rightarrow$', fontdict={'fontsize': 12, 'fontweight': 12})
-    fig.savefig('plots/PopVsProd.png', bbox_inches='tight')
+
     plt.style.use('seaborn-whitegrid')
-    plotTable['logPop']
+    
+    ax.set_xlim(left=500000, right=45000000)
+    ax.set_ylim(-1000, 100500)
+    
+    plt.xscale('log')
     ax.spines['bottom'].set_color('0')
     ax.spines['top'].set_color('0')
     ax.spines['right'].set_color('0')
     ax.spines['left'].set_color('0')
+    fig.savefig('plots/PopVsProd.png', bbox_inches='tight')
 
 def convert_to_list(pd):
     '''
@@ -457,7 +482,8 @@ def plot_bar_hydro(hydro):
         value = '%0.1f' % percent_hydro[v]
         plt.text(x = v-0.3, y = 96, s = value + '%', color='white', fontweight='bold',fontsize =10)
 
-    plt.legend(['Fossil','Others','Hydro'], loc="best", fontsize=16)
+    plt.legend(['Fossil','Others','Hydro'], loc="best", fontsize=16, frameon=True)
+#     plt.setp(plt.legend().get_texts(), color='w')
     plt.title('Portion of Hydropower, 2004-2018', fontsize=24, fontweight='bold')
     plt.xlabel('Year', fontsize=14)
     plt.ylabel("Percentage",fontsize=14)
@@ -490,10 +516,21 @@ def plot_bar_hydro_state(statehydro):
     text = sorted(hydro,reverse = True)
     for v in range(len(state)-46):
         value = '%1.0f' % text[v]
-        plt.text(x = v-0.4, y = text[v] + 1000, s = value + '(GWH)', color='black', fontweight='bold',fontsize =10)
+        plt.text(x = v-0.4, y = text[v] + 1000, s = value, color='black', fontweight='bold',fontsize =10)
     plt.ylabel('Production (GWh)', fontsize=14)
     plt.title('Hydroelectricity Production by States, 2017',fontsize = 20, fontweight='bold')
-    plt.xticks(rotation = 45, ha='right')
+    plt.xticks(rotation = 50, ha='right')
+    
+    plt.gca().get_xticklabels()[0].set_fontweight('bold')
+    plt.gca().get_xticklabels()[1].set_fontweight('bold')
+    plt.gca().get_xticklabels()[2].set_fontweight('bold')
+    plt.gca().get_xticklabels()[3].set_fontweight('bold')
+    
+    plt.gca().get_xticklabels()[0].set_fontsize(12)
+    plt.gca().get_xticklabels()[1].set_fontsize(12)
+    plt.gca().get_xticklabels()[2].set_fontsize(12)
+    plt.gca().get_xticklabels()[3].set_fontsize(12)
+    
     plt.style.use('seaborn-whitegrid')
     my_dpi=200
     plt.savefig('plots/Hydro_State_2004_2018.png', figsize=(1500/my_dpi, 1200/my_dpi), dpi=my_dpi)
@@ -501,6 +538,8 @@ def plot_bar_hydro_state(statehydro):
     
 def plot_map_wind_generation(wind_float,year): 
     '''
+        Plot wind energy generation map plots
+        
         projection: Lambert Conformal Projection (lcc)
         llcrnrlon: longitude of lower left hand corner of the desired map domain (-119)
         llcrnrlat:latitude of lower left hand corner of the desired map domain (22)
@@ -574,8 +613,9 @@ def plot_map_wind_generation(wind_float,year):
     fig.savefig('plots/wind_'+year+'.png', bbox_inches='tight', figsize=(1500/my_dpi, 1200/my_dpi), dpi=my_dpi)
 
     
-def plot_map_hydro_potential(data): 
+def plot_map_hydro_potential(data=None): 
     '''
+        PLot hydro energy generation map plots.
         projection: Lambert Conformal Projection (lcc)
         llcrnrlon: longitude of lower left hand corner of the desired map domain (-119)
         llcrnrlat:latitude of lower left hand corner of the desired map domain (22)
@@ -652,6 +692,9 @@ def plot_map_hydro_potential(data):
     plt.show()
 
 def GetEIAData1():
+    '''
+    Return EIA Data from CSV files as pandas dataframe
+    '''
     eia_temp = pd.read_csv('Plot_Data/eiadata/10.01/Jan-Dec 1973.csv')
     new_df = pd.DataFrame(columns=list(range(1973, 2020)), dtype='float64')
     new_df = new_df.fillna(0)
@@ -671,6 +714,7 @@ def GetEIAData1():
 
 def PlotRenewUSA(final=None):
     '''
+    Plot the renewable energy consumption vs energy source plot
     '''
     
     my_dpi=100
@@ -680,7 +724,7 @@ def PlotRenewUSA(final=None):
     ax.plot(final.index, final.iloc[::, [6, 7, 8, 9]]['Hydroelectric Power'], marker='', color='xkcd:azure', linewidth=2, alpha=0.9)
     ax.plot(final.index, final.iloc[::, [6, 7, 8, 9]]['Geothermal'], marker='', color='xkcd:rusty red', linewidth=2, alpha=0.9)
     ax.plot(final.index, final.iloc[::, [6, 7, 8, 9]]['Solar'], marker='', color='xkcd:golden yellow', linewidth=2, alpha=0.9)
-    ax.plot(final.index, final.iloc[::, [6, 7, 8, 9]]['Wind'], marker='', color='xkcd:dark grey', linewidth=2, alpha=0.9)
+    ax.plot(final.index, final.iloc[::, [6, 7, 8, 9]]['Wind'], marker='', color='xkcd:green', linewidth=2, alpha=0.9)
     plt.grid(b=True)
     ax.legend(['Hydroelectric Power', 'Geothermal', 'Solar', 'Wind'], frameon=True)
     ax.set_title('Renewable Energy Consumption in the USA', fontdict={'fontsize': 20, 'fontweight': 12}, color='xkcd:black')
@@ -691,6 +735,7 @@ def PlotRenewUSA(final=None):
     
 def GetEIAData2():
     '''
+    Get the data for EIA Table 10.02C as dataframe.
     '''
     
     montemp6 = pd.read_csv('Plot_Data/eiadata/10.02C/Jan-Dec 1973.csv')
@@ -711,9 +756,9 @@ def GetEIAData2():
 
 def GetEIAData3(montemp6=None):
     '''
-    
+    Get the monthwise data for EIA Table 10.2C as dataframe.
     '''
-    
+    assert isinstance(montemp6, pd.DataFrame)
     noofyears = 2019-2008+1
     curr = montemp6.loc['Jan 2008':].iloc[::, [0, 1, 2, 3]]
     # curr
@@ -727,7 +772,7 @@ def GetEIAData3(montemp6=None):
 
 def PlotMonthwiseUSA(monthwise=None):
     '''
-    
+    Plot the monthwise data for renewable consumption 
     '''
     
     my_dpi=200
@@ -775,7 +820,7 @@ def PlotMonthwiseUSA(monthwise=None):
 
 def PlotElectricCon(montemp6=None):
     '''
-    
+    Plot electric consumption data for all four sources.
     '''
     
     my_dpi=200
@@ -802,7 +847,7 @@ def PlotElectricCon(montemp6=None):
     
 def PlotSolarCon():
     '''
-    
+    Plot solar consumption data.
     '''
     
     montemp8 = pd.read_csv('Plot_Data/eiadata/10.05/Jan-Dec 1973.csv')
@@ -841,7 +886,7 @@ def PlotSolarCon():
     
 def PlotSolarGen():
     '''
-    
+    Plot Solar generation data.
     '''
     
     montemp10 = pd.read_csv('Plot_Data/eiadata/10.06/Jan-Dec 1973.csv')
@@ -883,7 +928,7 @@ def PlotSolarGen():
     
 def PlotWindProduction():
     '''
-    
+    Plot wind production data
     '''
     
     ActualEne = pd.read_csv('Plot_Data/Wind_ActualEne_AllStates.csv')
@@ -949,11 +994,11 @@ def PlotWindProduction():
                  )
 
     fig = dict(data=data, layout=layout)
-    iplot(fig, filename='Plots/Wind Actual Energy', image_height=1080, image_width=1920)
+    iplot(fig, filename='Wind Actual Energy', image_height=1080, image_width=1920)
     
 def PlotWindPotential():
     '''
-    
+    Plot wind potential data.
     '''
     
     PotEne = pd.read_csv('Plot_Data/Wind_Potential_AllStates.csv')
@@ -1019,11 +1064,11 @@ def PlotWindPotential():
                  )
 
     fig = dict(data=data, layout=layout)
-    iplot(fig, filename='Plots/Wind Max Potential', image_height=1080, image_width=1920)
+    iplot(fig, filename='Wind Max Potential', image_height=1080, image_width=1920)
     
 def PlotWindPercentPotential():
     '''
-    
+    Plot wind percent potential achieved data.
     '''
     
     Percent = pd.read_csv('Plot_Data/Wind_Percent_AllStates.csv')
@@ -1089,11 +1134,11 @@ def PlotWindPercentPotential():
                  )
 
     fig = dict(data=data, layout=layout)
-    iplot(fig, filename='Plots/Wind Percent Potential', image_height=1080, image_width=1920)
+    iplot(fig, filename='Wind Percent Potential', image_height=1080, image_width=1920)
     
 def PlotSolarProd():
     '''
-    
+    Plot solar production data
     '''
     
     ActualEne = pd.read_csv('Plot_Data/ActualSolarPotential.csv')
@@ -1168,11 +1213,11 @@ def PlotSolarProd():
     fig = dict(data=data, 
                layout=layout)
 
-    iplot(fig, filename='Plots/Solar Energy Actual Potential')
+    iplot(fig, filename='Solar Energy Actual Potential')
     
 def PlotSolarPotential():
     '''
-    
+    Plot solar potential data.
     '''
     
     MaxPot = pd.read_csv('Plot_Data/MaximumSolarPotential.csv')
@@ -1256,7 +1301,7 @@ def PlotSolarPotential():
     
 def PlotSolarPercentPotential():
     '''
-    
+    Plot solar percent potential achieved data.
     '''
     
     PercPot = pd.read_csv('Plot_Data/PercentSolarPotential.csv')
