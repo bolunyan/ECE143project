@@ -21,7 +21,6 @@ import scipy.stats
 import itertools as it
 import ast
 import time
-import os
 
 #######
 
