@@ -26,6 +26,31 @@ The project finds widespread real world application in the current scenario of t
 
 ## Steps to Run
 
+### Modules used
+#### Scraping and Structuring
+
+- numpy
+- pandas
+- geopandas
+- scipy
+- urllib
+- selenium
+- bs4 (BeautifulSoup)
+- math
+- zipfile
+- io
+- os
+- copy
+- itertools
+- ast
+- time
+
+#### Visualizations
+- plotly
+- matplotlib
+- basemap
+- imageio
+
 ### import renewable
 - #### Import the renewable.py
 
