@@ -73,7 +73,7 @@ The project finds widespread real world application in the current scenario of t
 - #### Scrapes the wind generation data from wikipedia and stores it in 'Plot_Data/wind_wiki.csv'.
 
 ### renewable.scrapeEIA()
-- #### Scrapes the EIA website for 6 tables for data from 1973-2019 and stores it table and yearwise in 'Plot_Data/eiadata/'.
+- #### Scrapes the EIA website using Selenium and chromedriver.exe (present in the repo) for 6 tables for data from 1973-2019 and stores it tablewise and yearwise in 'Plot_Data/eiadata/' folder.
 
 ### renewable.MakeCSPDataForSolar()
 - #### Utilizes combined solar data from public Solar dataset (shapefile downloaded from NSRDB website, presrnt in 'Potential/Solar/nsrdb_v3_0_1_1998_2016_dni.shp') and year-wise public Solar datasets (16 CSV files, downloaded from  NSRDB website, present in 'Potential/Solar/NSRDB-YearWise') in order to calculate Commercial Solar Production potential over the years. Saves the files as 'Potential/Solar/ActualPotential.csv', 'Potential/Solar/MaximumPotential.csv' and 'Potential/Solar/PercentPotential.csv'.
