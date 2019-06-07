@@ -1,5 +1,5 @@
 # Technical Potential of Renewable Energy
-### Swapnil Aggarwal   |   Bolun Yan   |   Yiwen Xia   |   Yiquing Hua
+### Swapnil Aggarwal   |   Bolun Yan   |   Yiwen Xia   |   Yiqing Hua
 
 ## Introduction
 
