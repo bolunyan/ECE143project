@@ -86,6 +86,7 @@ Stores all the plot visualizations as images.
 
 ### renewable.scrapeEIA()
 - #### Scrapes the EIA website using Selenium and chromedriver.exe (present in the repo) for 6 tables for data from 1973-2019 and stores it tablewise and yearwise in 'Plot_Data/eiadata/' folder.
+*** Kindly note that all development has been done on <b>Windows</b> platform and so we utilize chromedriver.exe for selenium webdriver.
 
 ### renewable.MakeCSPDataForSolar()
 - #### Utilizes combined solar data from public Solar dataset (shapefile downloaded from NSRDB website, presrnt in 'Potential/Solar/nsrdb_v3_0_1_1998_2016_dni.shp') and year-wise public Solar datasets (16 CSV files, downloaded from  NSRDB website, present in 'Potential/Solar/NSRDB-YearWise') in order to calculate Commercial Solar Production potential over the years. Saves the files as 'Potential/Solar/ActualPotential.csv', 'Potential/Solar/MaximumPotential.csv' and 'Potential/Solar/PercentPotential.csv'.
