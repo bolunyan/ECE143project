@@ -53,6 +53,7 @@ Stores all the plot visualizations as images.
 - lxml >= 4.3.3
 - selenium >= 3.141.0
 - beautifulsoup4 (BeautifulSoup) >= 4.7.1
+- xlrd >= 1.2.0
 
 #### Visualizations
 - plotly >= 3.10.0
