@@ -40,29 +40,25 @@ Stores all the plot visualizations as images.
 ## Steps to Run
 
 ### Modules used
+<b><u>Python >= 3.6.8</b></u>
+
+
 #### Scraping and Structuring
 
-- numpy
-- pandas
-- geopandas
-- scipy
-- urllib
-- selenium
-- bs4 (BeautifulSoup)
-- math
-- zipfile
-- io
-- os
-- copy
-- itertools
-- ast
-- time
+- numpy >= 1.16.4
+- pandas >= 0.24.2
+- geopandas >= 0.4.1
+- scipy >= 1.2.1
+- urllib3 >= 1.25.3
+- lxml >= 4.3.3
+- selenium >= 3.141.0
+- beautifulsoup4 (BeautifulSoup) >= 4.7.1
 
 #### Visualizations
-- plotly
-- matplotlib
-- basemap
-- imageio
+- plotly >= 3.10.0
+- matplotlib >= 3.1.0
+- basemap >= 1.2.1
+- imageio >= 2.5.0
 
 (A sample of all the instructions below is present in <b>SampleOutput.pdf</b>) 
 
