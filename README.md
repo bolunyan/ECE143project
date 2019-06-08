@@ -24,6 +24,19 @@ The project finds widespread real world application in the current scenario of t
 - Categorization and identification of key metrics
 - Data visualization of the obtained metrics
 
+## File structure
+### Plot_Data
+Stores all the generic datasets used for generating visualizations. Generated and saved by running the code as mentioned below.
+
+### Potential
+Stores all the datasets used for Energy Potential calculations.
+
+### WikiLinks
+Stores the file WikiLinks.txt which is consumed by the function <b>renewable.getWikiTables()</b>.
+
+### plots
+Stores all the plot visualizations as images.
+
 ## Steps to Run
 
 ### Modules used
